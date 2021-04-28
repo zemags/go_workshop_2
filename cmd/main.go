@@ -5,10 +5,14 @@ import (
 
 	workshop_2 "github.com/zemags/go_workshop_2"
 	"github.com/zemags/go_workshop_2/pkg/handler"
+	"github.com/zemags/go_workshop_2/pkg/repository"
+	"github.com/zemags/go_workshop_2/pkg/service"
 )
 
 func main() {
-	handlers := new(handler.Handler)
+	repos := repository.NewRepository()
+	services := service.NewService(repos)
+	handlers := handler.NewHandler(services)
 
 	srv := new(workshop_2.Server)
 	if err := srv.Run("8000", handlers.InitRoutes()); err != nil {
