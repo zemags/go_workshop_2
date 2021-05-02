@@ -1,8 +1,13 @@
 package service
 
-import "github.com/zemags/go_workshop_2/pkg/repository"
+import (
+	"github.com/zemags/go_workshop_2/pkg/repository"
+	workshop_2 "github.com/zemags/go_workshop_2/store"
+)
 
 type Authorization interface {
+	// CreateUser return user id and error
+	CreateUser(user workshop_2.User) (int, error)
 }
 
 type TodoList interface {
@@ -17,6 +22,9 @@ type Service struct {
 	TodoItem
 }
 
+// NewService - its a constructor
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repos),
+	}
 }

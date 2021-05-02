@@ -22,3 +22,10 @@ grant all privileges on database todo to user_name;
 
 psql -h localhost -d todo -U user_name -p 5432 -a -q -f ../path_to_schema/go_workshop_2/schema/000001_init.up.sql
 ```
+Clean architecture
+* Easy system testing and scaling
+* Easy to change dependencies (like db, frameworks)
+* Any user interface
+* business logic layer do not depend on database
+
+http requests -> handler -> service(business logic layer) -> repository(db)
