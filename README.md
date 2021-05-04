@@ -29,3 +29,5 @@ Clean architecture
 * business logic layer do not depend on database
 
 http requests -> handler -> service(business logic layer) -> repository(db)
+
+JWT Token - any requests from users with token to identify user

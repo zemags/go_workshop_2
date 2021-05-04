@@ -3,6 +3,7 @@ module github.com/zemags/go_workshop_2
 go 1.15
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.1
 	github.com/go-playground/validator/v10 v10.5.0 // indirect
 	github.com/golang-migrate/migrate v3.5.4+incompatible // indirect

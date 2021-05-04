@@ -8,6 +8,7 @@ import (
 type Authorization interface {
 	// CreateUser return user id and error
 	CreateUser(user workshop_2.User) (int, error)
+	GenerateToken(username, password string) (string, error)
 }
 
 type TodoList interface {

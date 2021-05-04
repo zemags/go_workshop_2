@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user workshop_2.User) (int, error)
+	GetUser(username, password string) (workshop_2.User, error)
 }
 
 type TodoList interface {
