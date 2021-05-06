@@ -25,7 +25,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 
 	// Work with todo lists
-	api := router.Group("/api")
+	api := router.Group("/api", h.userIdentity)
 	{
 		lists := api.Group("/lists")
 		{
