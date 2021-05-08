@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 
 const (
 	authorizationHeader = "Authorization"
+	userCtx             = "userID"
 )
 
 // userIdentity - get token from header and validate
@@ -32,6 +34,22 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	}
 
 	//write to context, to user in next handlers
-	c.Set("userID", userID)
+	c.Set(userCtx, userID)
 
+}
+
+// getUserID - convert id to int type
+func getUserID(c *gin.Context) (int, error) {
+	id, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id is not found")
+		return 0, errors.New("user id is not found")
+	}
+
+	idInt, ok := id.(int)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id is of invalid type")
+		return 0, errors.New("user id is of invalid type")
+	}
+	return idInt, nil
 }
