@@ -2,9 +2,9 @@ package store
 
 // TodoList contain main info for one todo
 type TodoList struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title" binding:"required"`
-	Description string `json:"description"`
+	ID          int    `json:"id" db:"id"`
+	Title       string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description"`
 }
 
 // TodUserListoList contain relation between user and list
