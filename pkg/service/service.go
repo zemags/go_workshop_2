@@ -17,6 +17,7 @@ type TodoList interface {
 	GetAll(userID int) ([]workshop_2.TodoList, error)
 	GetByID(userID, listID int) (workshop_2.TodoList, error)
 	Delete(userID, listID int) error
+	Update(userID, listID int, input workshop_2.UpdateListInput) error
 }
 
 type TodoItem interface {

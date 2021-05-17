@@ -2,8 +2,10 @@ package repository
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 	workshop_2 "github.com/zemags/go_workshop_2/store"
 )
 
@@ -76,5 +78,35 @@ func (r *TodoListPostgres) Delete(userID, listID int) error {
 		todoListTable, usersListsTable)
 
 	_, err := r.db.Exec(query, userID, listID)
+	return err
+}
+
+func (r *TodoListPostgres) Update(userID, listID int, input workshop_2.UpdateListInput) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argID := 1
+
+	if input.Title != nil {
+		setValues = append(setValues, fmt.Sprintf("title=$%d", argID))
+		args = append(args, *input.Title)
+		argID++
+	}
+
+	if input.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("description=$%d", argID))
+		args = append(args, *input.Description)
+		argID++
+	}
+
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf("update %s tl set %s from %s ul where tl.id = ul.list_id and ul.list_id=$%d and ul.user_id=$%d",
+		todoListTable, setQuery, usersListsTable, argID, argID+1)
+	args = append(args, listID, userID)
+
+	logrus.Debugf("updateQuery: %s", query)
+	logrus.Debugf("args: %s", args)
+
+	_, err := r.db.Exec(query, args...)
 	return err
 }
