@@ -19,6 +19,7 @@ type TodoList interface {
 }
 
 type TodoItem interface {
+	Create(listID int, item workshop_2.TodoItem) (int, error)
 }
 
 type Repository struct {
