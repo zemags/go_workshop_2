@@ -113,3 +113,11 @@ func (r *TodoItemPostgres) Update(userID, itemID int, input workshop_2.UpdateIte
 	_, err := r.db.Exec(query, args...)
 	return err
 }
+
+func (r *TodoItemPostgres) Delete(userID, itemID int) error {
+	query := fmt.Sprintf(`delete from %s ti using %s li, %s ul where ti.id = li.item_id and li.list_id = ul.list_id and ul.user_id = $1 and ti.id = $2`,
+		todoItemsTable, listsItemsTable, usersListsTable)
+
+	_, err := r.db.Exec(query, userID, itemID)
+	return err
+}

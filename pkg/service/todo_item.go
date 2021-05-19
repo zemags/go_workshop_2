@@ -38,3 +38,7 @@ func (s *TodoItemService) Update(userID, itemID int, input workshop_2.UpdateItem
 	}
 	return s.repo.Update(userID, itemID, input)
 }
+
+func (s *TodoItemService) Delete(userID, itemID int) error {
+	return s.repo.Delete(userID, itemID)
+}
