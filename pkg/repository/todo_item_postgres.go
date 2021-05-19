@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	workshop_2 "github.com/zemags/go_workshop_2/store"
@@ -70,7 +71,7 @@ func (r *TodoItemPostgres) GetByID(userID, itemID int) (workshop_2.TodoItem, err
 		on li.list_id  = ul.list_id
 		on ti.id = li.item_id
 		where ul.user_id = $1
-		and ti.item_id = $2`,
+		and ti.id = $2`,
 		todoItemsTable, todoListTable, usersListsTable,
 	)
 
@@ -78,4 +79,37 @@ func (r *TodoItemPostgres) GetByID(userID, itemID int) (workshop_2.TodoItem, err
 		return item, err
 	}
 	return item, nil
+}
+
+func (r *TodoItemPostgres) Update(userID, itemID int, input workshop_2.UpdateItemInput) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argID := 1
+
+	if input.Title != nil {
+		setValues = append(setValues, fmt.Sprintf("title=$%d", argID))
+		args = append(args, *input.Title)
+		argID++
+	}
+
+	if input.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("description=$%d", argID))
+		args = append(args, *input.Description)
+		argID++
+	}
+
+	if input.Done != nil {
+		setValues = append(setValues, fmt.Sprintf("done=$%d", argID))
+		args = append(args, *input.Done)
+		argID++
+	}
+
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf("update %s ti set %s from %s li, %s ul where ti.id = li.item_id and li.list_id=ul.list_id and ul.user_id = $%d and ti.id = $%d",
+		todoItemsTable, setQuery, listsItemsTable, usersListsTable, argID, argID+1)
+	args = append(args, userID, itemID)
+
+	_, err := r.db.Exec(query, args...)
+	return err
 }

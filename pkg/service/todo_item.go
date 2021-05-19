@@ -31,3 +31,10 @@ func (s *TodoItemService) GetAll(userID, listID int) ([]workshop_2.TodoItem, err
 func (s *TodoItemService) GetByID(userID, itemID int) (workshop_2.TodoItem, error) {
 	return s.repo.GetByID(userID, itemID)
 }
+
+func (s *TodoItemService) Update(userID, itemID int, input workshop_2.UpdateItemInput) error {
+	if err := input.Validate(); err != nil {
+		return err
+	}
+	return s.repo.Update(userID, itemID, input)
+}
