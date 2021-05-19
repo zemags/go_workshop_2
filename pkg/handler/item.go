@@ -38,7 +38,24 @@ func (h *Handler) createItem(c *gin.Context) {
 }
 
 func (h *Handler) allItems(c *gin.Context) {
+	userID, err := getUserID(c)
+	if err != nil {
+		return
+	}
 
+	listID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
+		return
+	}
+
+	items, err := h.services.TodoItem.GetAll(userID, listID)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, items)
 }
 
 func (h *Handler) itemByID(c *gin.Context) {

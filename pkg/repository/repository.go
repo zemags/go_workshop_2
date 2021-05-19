@@ -20,6 +20,7 @@ type TodoList interface {
 
 type TodoItem interface {
 	Create(listID int, item workshop_2.TodoItem) (int, error)
+	GetAll(userID, listID int) ([]workshop_2.TodoItem, error)
 }
 
 type Repository struct {
@@ -34,5 +35,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		// initialize
 		Authorization: NewAuthPostgres(db),
 		TodoList:      NewTodoListPostgres(db),
+		TodoItem:      NewTodoItemPostgres(db),
 	}
 }
