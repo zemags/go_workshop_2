@@ -27,3 +27,7 @@ func (s *TodoItemService) Create(userID, listID int, item workshop_2.TodoItem) (
 func (s *TodoItemService) GetAll(userID, listID int) ([]workshop_2.TodoItem, error) {
 	return s.repo.GetAll(userID, listID)
 }
+
+func (s *TodoItemService) GetByID(userID, itemID int) (workshop_2.TodoItem, error) {
+	return s.repo.GetByID(userID, itemID)
+}
